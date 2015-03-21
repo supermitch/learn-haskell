@@ -125,3 +125,63 @@ calcBMIs xs = [bmi w h | (w, h) <- xs]
 
 -- "bmi weight height" is an entirely new function
 
+--  let:
+-- ======
+
+{- Where binding scope is the entire function, and defined at the end of
+the function. Let binding are local and don't span across guards.
+-}
+
+cylinder :: (RealFloat a) -> a -> a -> a
+cylinder r h =
+    let sideArea = 2 * pi * r * h
+        topArea = pi * r^2
+    in sideArea + 2 * topArea
+
+-- form is let <bindings> in <expression>
+
+calcBmis :: (RealFloat a) => [(a, a)] -> [a]
+calcBmi xs = [bmi | (w, h) <- xs, let bmi = w / h ^2]
+
+calcBmis' :: (RealFloat a) => [(a, a)] -> [a]
+calcBmis' xs = [bmi | (w, h) <- xs, let bmi = w / h^2, bmi >= 25.0]
+
+-- You can omit the 'in' scoping and names will be visit throughout, in ghci
+-- e.g. let zoot x y z = x * y + z
+
+--  Case Expressions:
+-- ===================
+
+-- these two functions are interchangeable:
+head' :: [a] -> a
+head' [] = error "No head for empty lists"
+head' (x:_) = x
+
+head'' :: [a] -> a
+head'' xs = case xs of [] -> error "No head for empty lists"
+                       (x:_) -> x
+
+-- The general syntax is simple:
+{-
+    case expression of pattern -> result
+                       pattern -> result
+                       pattern -> result
+                       ...
+
+Case expressions can be used anywhere, unlike pattern matching:
+e.g. -}
+
+describeList :: [a] -> String
+describeList xs = "The list is " ++ case xs of [] -> "empty"
+                                                [x] -> "a singleton list"
+                                                xs -> "a longer list"
+
+-- They are useful for pattern matching in the middle of an expression.
+-- That is similar to this:
+
+describeList' :: [a] -> String
+describeList' xs = "The list is " ++ what xs
+    where what [] = "empty"
+          what [x] = "singleton"
+          what xs = "long"
+
