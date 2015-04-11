@@ -143,7 +143,7 @@ flip'' f = \x y -> f y x
 -- equivalent to: flip f x y = f y x
 -- Clearly indicates that we are returning a function
 
--- FOLDL
+-- FOLDS
 -- =====
 
 sum' :: (Num a) => [a] -> a
@@ -162,5 +162,73 @@ Can be written much more succinctly: -}
 sum'' :: (Num a) => [a] -> a
 sum'' = foldl (+) 0
 
--- Which returns a partially applied function that accepts a list for folding
+{-
+ Which returns a partially applied function that accepts a list for folding.
+
+ Generally, if you have a function of the form: func a = bar b a
+ you simply re-write it as func = bar b, because of currying.
+-}
+
+-- Implement elem` with foldl:
+
+elem' :: (Eq a) => a -> [a] -> Bool
+elem' y ys = foldl (\acc x -> if x == y then True else acc) False ys
+
+-- foldr just pulls from the right of the list, and reverses the
+-- argument order in the lambda:
+
+map'' :: (a -> b) -> [a] -> [b]
+map'' f xs = foldr (\x acc -> f x : acc) [] xs
+
+{-
+-- Here we used an empty list as start value and did cons to construct
+-- list for each item.
+
+e.g.
+
+map' (+3) [1,2,3] --> 3+1:(3+2:(3+3:[])) --> [4,5,6]
+
+or with foldl:
+
+map'' f xs = foldl (\acc x -> acc ++ [f x]) [] x
+
+++ is much more expensive than : (cons)!
+----------------------------------------
+
+foldl1 and foldr1 are the same, except they don't take an initial value,
+they use the starting list value.
+
+e.g. this fully implemented sum function!
+sum = foldl1 (+)
+
+Numerous examples of standard library functions using folds:
+
+-}
+
+maximum' :: (Ord a, Num a) => [a] -> a
+maximum' = foldr1 (\x acc -> if x > acc then x else acc)
+
+reverse' :: [a] -> [a]
+reverse' = foldl (\acc x -> x : acc) []
+
+-- My version:
+product' :: (Num a) => [a] -> a
+product' = foldl (\acc x -> x * acc) 1
+
+-- Much better:
+product'' :: (Num a) => [a] -> a
+product'' = foldr1 (*)
+
+filter'' :: (a -> Bool) -> [a] -> [a]
+filter'' p = foldr (\x acc -> if p x then x : acc else acc) []
+
+-- For these cases, you just ignore the accumulator (1 in both cases),
+-- iterate through the list, and return the final 'x':
+
+head' :: [a] -> a
+head' = foldr1 (\x _ -> x)
+
+last' :: [a] -> a
+last' = foldl1 (\_ x -> x)
+
 
