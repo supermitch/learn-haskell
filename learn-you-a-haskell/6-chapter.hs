@@ -232,3 +232,29 @@ last' :: [a] -> a
 last' = foldl1 (\_ x -> x)
 
 
+{-
+SCANL & SCANR
+
+scanl and scanr are just like foldl and foldr, but they return
+intermediate accumulator states as as list
+
+scanl (+) 0 [3,5,2,1] --> [0,3,8,10,11]
+scanr (+) 0 [3,5,2,1] --> [11,10,8,3,1,0]
+
+scanl1 (\acc x -> if x > acc then x else acc) [3,4,5,3,7,9,2,1] -->
+[3,4,5,5,7,9,9,9]
+
+scanl (flip (:)) [] [3,2,1]
+[[], [3], [2,3], [1,2,3]]
+
+Scans are used to monitor the prgression of afunction that can be
+implemented as a fold.
+
+"How many elements does it take for the sum of the roots of all natural
+numbers to exceed 1000".
+-}
+
+sqrtSum :: Int
+sqrtSum = length (takeWhile (< 1000) (scanl1 (+) (map sqrt [1..]))) + 1
+
+
