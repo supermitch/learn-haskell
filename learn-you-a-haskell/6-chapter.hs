@@ -247,7 +247,7 @@ scanl1 (\acc x -> if x > acc then x else acc) [3,4,5,3,7,9,2,1] -->
 scanl (flip (:)) [] [3,2,1]
 [[], [3], [2,3], [1,2,3]]
 
-Scans are used to monitor the prgression of afunction that can be
+Scans are used to monitor the prgression of a function that can be
 implemented as a fold.
 
 "How many elements does it take for the sum of the roots of all natural
@@ -258,3 +258,121 @@ sqrtSum :: Int
 sqrtSum = length (takeWhile (< 1000) (scanl1 (+) (map sqrt [1..]))) + 1
 
 
+{-
+FUNCTION APPLICATION WITH $
+
+($) :: (a -> b) -> a -> b
+f $ x = f x
+
+consider:
+
+sum (map sqrt [1..10])  -- brackets are required
+
+or can be written as:
+
+sum $ map sqrt [1..10]  -- fancy
+
+similarly:
+
+sum (3 + 4 + 5)
+
+can be written as:
+
+sum $ 3 + 4 + 5
+
+Another:
+
+sum (filter (> 10) (map (*2) [2..10]))  -- multiply list by 2 and filter by > 10, then sum
+
+or better yet:
+
+sum $ filter (> 10) $ map (*2) [2..10]  -- fancy
+
+However you can use it like a function (which it is...)
+-}
+
+map ($ 3) [(4+), (10*), (^2), sqrt]
+[7.0, 30.0, 9.0, 1.73205]  -- nutty...
+
+
+{-
+FUNCTION COMPOSITION
+
+(.) :: (b -> c) -> (a -> b) -> a -> c
+f . g = \x -> f (g x)
+
+Note that g() returns type b and f() takes type b.
+
+e.g. negate . (* 3) yields a new function that returns the negative multiple of 3.
+
+This is useful as a clearer, more concise kind of lambda.
+-}
+
+map (\x -> negate (abs x)) [5, -3, -6, 7, 2]
+[-5, -3, -6, -7, -2]
+
+-- using function composition we can re-write this as:
+
+map (negate . abs) [5, -3, -6, 2] -- cool.
+
+-- function composition is right-associative, so
+-- f (g (h x)) is (f . g . h) x
+
+map (\xs -> negate (sum (tail xs))) [[1..5], [3..6], [1..7]]
+[-14, -15, -27]
+
+-- or as a function composition
+
+map (negate . sum . tail) [[1..5], [3..6], [1..7]]
+
+-- If a function takes more than one parameter, you have to partially apply them..
+
+sum (replicate 5 (max 6.7 8.9))  -- can be re-written as:
+
+(sum . replicate 5 . max 6.7) 8.9  -- or:
+sum . replicate 5 . max 6.7 $ 8.9
+
+{- If you want to rewrite a complex function using composition, start by putting the
+last parameter of the innermost function after a $ and them composing all the others:
+
+e.g. -}
+
+replicate 100 (product (map (*3) (zipWith max [1,2,3,4,5] [4,5,6,7,8]))) -- can be rewritten as:
+
+replicate 100 . product . map (*3) . zipWith max [1,2,3,4,5] $ [4,5,6,7,8] -- yikes. wtf.
+
+-- Another use is point-free style:
+
+sum' :: (Num a) => [a] -> a
+sum' xs = foldl (+) 0 xs
+
+-- because of currying we can omit the xs
+
+sum' = foldl (+) 0
+
+-- That is called "point free style"
+-- How would you write this in point free style?
+
+fn x = ceiling (negate (tan (cos (max 50 x))))
+
+-- Like this:
+
+fn = ceiling . negate . tan . cos . max 50
+
+-- Let's rewrite our "sum of odd squares smaller than 10,000":
+
+oddSquareSum :: Integer
+oddSquareSum = sum (takeWhile (< 10000) (filter odd (map (^2) [1..])))
+
+-- let's re-write this using composition:
+
+oddSquareSum = sum . takeWhile (< 10000) . filter odd . map (^2) $ [1..]
+
+-- However, that is ugly. Normal readable code would be something like this:
+
+oddSquareSum =
+    let oddSquares = filter odd $ map (^2) [1..]
+        belowLimit = takeWhile (< 10000) oddSquares
+    in sum belowLimit
+
+-- (... personally I think that's awful but that's just me)
