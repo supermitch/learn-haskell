@@ -5,10 +5,10 @@ main = do
     putStrLn ("You wrote: " ++ input ++ " which" ++ result ++ " a palindrome!")
 
 isPalindrome :: String -> Bool
-isPalindrome [] True
-isPalindrome [x] True
-isPalindrome (xs)
-    | head s == last string = isPalindrome $ init $ tail s
+isPalindrome [] = True
+isPalindrome [x] = True
+isPalindrome (x:xs)
+    | x == last xs = isPalindrome $ init xs
     | otherwise = False
 
 describeBool :: Bool -> String
