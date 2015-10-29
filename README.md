@@ -4,8 +4,13 @@ Learn Haskell (using whatever means necessary) - My Haskell education repo.
 
 ## Contents
 
-Various programs of progressing complexity.
+### Sandbox
 
-* official - Anything approximately in [the official docs](https://www.haskell.org/)
-* learn-you-a-haskell - [Learn You a Haskell for Great Good](http://learnyouahaskell.com/)
+Various programs of progressing complexity in the [Sandbox](sandbox).
+
+### Course Notes & Exercises
+
+* Official - Anything approximately in [the official docs](https://www.haskell.org/)
+* Learn You A Haskell - [Learn You a Haskell for Great Good](http://learnyouahaskell.com/)
+* Real World Haskell - [Real World Haskell](http://book.realworldhaskell.org/)
 
