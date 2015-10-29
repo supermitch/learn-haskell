@@ -140,7 +140,100 @@ search needle haystack =
 -- matches our needle, (up to the length of the needle) then our accumulator becomes True.
 -- Accumulator being True continues to bubble up to the finish.
 
-search "ha" "whassup"
+> search "ha" "whassup"
 True
 
+-- That's just a duplicate of the 'isInfixOf' function:
+
+> "cat" `isInfixOf` "I'm a cat burglar"  -- Is case sensitive
+True
+
+-- These are similar to isPrefixOf or isSuffixOf:
+
+> isPrefixOf "hey" "hey there!"
+True
+> "there!" `isSuffixOf` "Hey there!"
+True
+
+> elem 5 [1..10]  -- Is elem in the list?
+True
+
+> notElem 5 [1..4]  -- Check if element is NOT inside the list
+True
+
+-- Partition breaks a list up into two, via a predicate:
+> partition (`elem` ['A'..'Z']) "BOBisaCOOLguy"
+("BOBCOOL", "isaguy")
+
+-- This is different to how span and break work, because they stop running
+-- as soon as the predicate switches to False (or True, for break).
+
+
+-- Find finds the first element that satisfies a predicate, but wraps the
+-- response in a Maybe value:
+
+> find (>4) [1..6]
+Just 5  -- Found something
+> find (>10) [1..6]
+Nothing -- Empty Maybe value.
+
+:t find
+find :: (a -> Bool) -> [a] -> Maybe a
+
+-- Note that the end result of find a `Maybe a`. Maybe is just like a list,
+-- except that it can only only 0 or 1 elements. [] or [a], but not [a:as].
+
+-- Let's try to reimplement a previous function using Maybe:
+
+head (dropWhile (\(val, y, m, d) -> val < 1000) stock)
+
+-- find the first value with a stock price of $1000 or more.
+-- using 'head' here is not safe, because head [] raises an exception.
+-- However, we could re-write that as:
+
+find (\(val, y, m, d) -> val > 1000) stock
+
+-- Now it will either return something like Just (1001.4, 2015, 9, 4) if a
+-- > 1000 entry is found, or Nothing.
+
+-- elemIndex returns the Maybe index of the element's location (0 based index)
+
+:t elemIndex
+elemIndex :: (Eq a) => a -> [a] -> Maybe Int
+> 4 `elemIndex` [1,2,3,4,5,6]
+Just 3
+> 8 `elemIndex` [1,2,3,4]
+Nothing
+
+-- Neat.
+
+> elemIndices 5 [1,5,2,5,3,5]
+[1, 3, 5]
+
+-- No need for Maybe because we either get a list, or an empty list, which
+-- is equivalent to Nothing basically.
+
+> findIndex (==4) [5,3,2,1,6,4]
+Just 5
+
+> findIndices (`elem` ['A'..'Z']) "Where Are The Caps?"
+[0, 6, 10, 14]
+
+lines -- breaks a string into lines, using \n newline character:
+> lines "first\nsecond\nthird"
+["first", "second", "third"]
+
+unlines -- is just the opposite.
+
+words -- splits a line of text into words:
+> words "this is a test. What will the words be?\nNobody knows for sure!"
+["this","is","a","test.","What","will","the","words","be?","Nobody","knows","for","sure!"]
+
+unwords -- the opposite:
+> unwords ["hey","there","mate"]
+"hey there mate"
+
+nub -- Eliminates duplicates:
+> nub [1,2,3,1,2,3,1,2,3,4]
+[1,2,3,4]
 
