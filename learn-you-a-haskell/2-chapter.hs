@@ -1,18 +1,97 @@
--- http://learnyouahaskell.com/
+http://learnyouahaskell.com/starting-out
+
+-- Starting Out
+
+{-
+Run ghci
+Can set prompt using :set prompt "ghci> "
+
+Note that you cannot do 5 * -3, you will get an error:
+    Precedence parsing error
+    cannot mix `*' [infixl 7] and prefix `-' [infixl 6] in the same infix expression
+
+Instead do 5 * (-3)
+
+&& means boolean AND, || means boolean OR.
+not negates True or False.
+-}
+
+> True && False
+False
+> True && True
+True
+> not False
+True
+
+-- etc.
+-- Testing for equality:
+
+> 5 == 5
+True
+> 1 == 0
+False
+> 5 /= 5
+False
+> 5 /= 4
+True
+> "hello" == "hello"  -- String equality
+True
+
+-- Infix & Prefix functions:
+
+> 5 * 4 -- (*) is actually an infix function
+20
+> succ 8 -- prefix function
+9
+> min 9 10 -- multiple function arguments
+9
+
+-- Function application (func then arg with a space) has the highest
+-- operator precedence.
+
+> succ 9 + max 5 4 + 1 -- (succ 9) + (max 5 4) + 1
+
+-- You can turn a prefix function into an infix function using backticks:
+
+> div 92 10
+9
+-- alternatively:
+> 92 `div` 10  -- Now it's infix
+9
+
+-- First functions:
 
 doubleMe x = x + x
+> doubleMe 9
+18
 
 doubleUs x y = x*2 + y*2
+> doubleUs 3 5
+16
 
--- Or better yet
-doubleUs x y = doubleMe x + doubleMe y
+-- Alternatively:
 
+doubleUs x y = doubleMe x + doubleMe y -- call functions defined elsewhere
+
+-- Order of function definition is unimportant
+
+-- Let's use an if statement:
 doubleSmallNumber x = if x > 100
-                        then x
-                        else x*2
+                         then x
+                         else x * 2
 
--- One liner
-doubleSmallNumber' x = (if x > 100 then x else x*2) + 1
+-- else is *mandatory*.
+-- Can be inline:
+doubleSmallnumber` x = (if x > 100 then x else x * 2) + 1
+
+-- Valid function names:
+conan'Obrien = "Hello" -- valid!
+Conan'Obrien = "wrong..." -- Invalid, cannot capitalize functions
+
+-- When a function takes no parameters it is called a "definition" or a "name".
+
+
+-- Intro to Lists
 
 {- Operators
  - ++ extend lists [1,2] ++ [3,4] -> [1,2,3,4]
