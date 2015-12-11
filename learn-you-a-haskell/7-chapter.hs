@@ -237,3 +237,178 @@ nub -- Eliminates duplicates:
 > nub [1,2,3,1,2,3,1,2,3,4]
 [1,2,3,4]
 
+
+-- Data.Char --
+---------------
+
+{- Character Handling
+
+* Char predicates have type signature Char -> Bool
+* Used to filter strings, usually
+
+-- Determine if a 'list' is alphaNumeric
+-}
+
+> all isAlphaNum "SomeString43"
+True
+
+> all isAlphaNum "String with spaces!"
+False
+
+-- Using isSpace to simulate Data.List function 'words':
+
+> words "hey guys it's me"
+["hey", "guys", "it's", "me"]
+
+groupBy ((==) `on` isSpace) "Hey guys it's me"
+["hey", " ", "guys", " ", "it's", " ", "me"]
+
+-- Not quite. Let's filter it:
+
+filter (not . any isSpace) . groupBy ((==) `on` isSpace) $ "hey guys it's me"
+["hey", "guys", "it's", "me"]
+
+
+-- General Category:
+
+> generalCategory ' '
+Space
+> generalCategory " \t\nA9?|"
+[Space,Control,Control,Uppercase,DecimalNumber,OtherPunctuation,MathSymbol]
+
+-- There are 31 categories of chars...
+-- you can also do
+
+> generalCategory c == Space
+
+-- ord and chr functions convert characters to numbers and vice versa:
+
+> ord 'a'
+97
+> chr 97
+'a'
+> map ord "abcdefgh"
+[97,98,99,100, ..., 104]
+
+-- Let's create a Caesar Cipher
+encode :: Int -> String -> String
+encode shift msg =
+    let ords = map ord msg  -- Convert to a list of numbers
+        shifted = map (+ shift) ords  -- Shift by adding 'shift'
+    in map chr shifted  -- Convert back to string
+
+-- You can also write this using function composition:
+
+map (chr . (+ shift) . ord) msg  -- Damn.
+
+-- Decode works similarly
+
+decode :: Int -> String -> String
+decode shift msg = encode (negate shift) msg
+
+-- Data.Map
+
+-- A map are lists of Key Value pairs, e.g.
+
+phoneBook = [("mitch", "123-234") ,("test", "123") ,("blah", "45689704")]
+
+-- Let's look up a key
+
+findKey :: (Eq k) => k -> [(k,v)] -> v
+findKey key xs = snd . head . filter (\(k,v) -> key == k) $ xs
+
+-- Unfortunately if we don't find the key, we'll take the head of the empty
+-- list, which will crash. Let's return a Maybe:
+
+findKey :: (Eq k) => k -> [(k,v)] -> Maybe v
+findKey key [] = Nothing
+findKey key ((k,v):xs) = if key == k
+                            then Just v
+                            else findKey key xs
+
+-- That's a classic fold pattern. Let's try to re-implement as a fold:
+findKey :: (Eq k) => k -> [(k,v)] -> Maybe v
+findKey key = foldr (\(k,v) acc -> if key == k then Just v else acc) Nothing
+
+> findKey "mitch" phoneBook
+Just "123-234"
+>findKey "horse" phoneBook
+Nothing
+
+-- That's the functionality of the Data.List lookup function.
+
+-- Data.Map has functionality that clashes with Prelude and Data.List, so qualify your import.
+
+import qualified Data.Map as Map
+
+> Map.fromList [("a", 1), ("b", 2)]
+fromList [("a",1),("b",2)]
+
+-- empty represents an empty map
+> Map.empty
+fromList []
+
+> Map.insert "c" 5 Map.empty
+fromList [("c", 5)]
+
+> Map.null Map.empty -- Check for empty map
+True
+
+-- Maps have a map and filter as well:
+
+> Map.map (*100) $ Map.fromList [(1,1), (2,2), (3,3)]
+fromList [(1,100), (2,200), (3,300)]
+
+-- ... More map stuff here...
+
+-- Data.Set
+
+-- ... More set stuff here...
+
+-- Making Modules
+
+-- Start with a file, call it Geometry.hs
+
+Geometry.hs
+-----------
+
+-- define our exports
+module Geometry
+( sphereVolume
+, sphereArea
+, cubeVolume
+, cubeArea
+, cuboidArea
+, cuboidVolume
+) where
+
+-- now define our functions
+sphereVolume :: Float -> Float
+sphereVolume r = (4.0 / 3.0) * pi * (radius ^ 3)
+
+-- ... etc.
+
+-- Note that this function is private
+rectangleArea :: Float -> Float -> Float
+rectangleArea a b = a * b
+
+-------------
+
+-- Now in other files, we simply import, if it's in the same folder
+import Geometry
+
+-- We can also create submodules:
+-- Create a folder called Geometry
+-- define files within it:
+
+Sphere.hs
+---------
+
+module Geometry.Sphere (volume, area) where
+
+volume :: Float -> Float
+volume r = ...
+
+area :: Float -> Float
+area r = ...
+
