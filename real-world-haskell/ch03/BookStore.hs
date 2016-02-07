@@ -40,3 +40,23 @@ data BillingInfo = CreditCard CardNumber CardHolder Address
                    deriving (Show)
 
 -- Note that the three Value Constructors all take different args.
+
+-- We can pattern match on an algebraic data type using it's value constructors:
+
+bookId      (Book id title authors) = id
+bookTitle   (Book id title authors) = title
+bookAuthors (Book id title authors) = authors
+
+nicerId      (Book id  _     _      ) = id
+nicerTitle   (Book _   title _      ) = title
+nicerAuthors (Book _   _     authors) = authors
+
+-- Writing all these accessor functions is tedious.
+-- We can define the data type and it's accessors at the same time:
+
+data Customer = Customer {
+      customerId      :: CustomerId
+    , customerName    :: String
+    , customerAddress :: Address
+    } deriving (Show)
+
