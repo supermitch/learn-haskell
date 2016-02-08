@@ -60,3 +60,17 @@ data Customer = Customer {
     , customerAddress :: Address
     } deriving (Show)
 
+-- We can still use the usual syntax to create values of this type:
+
+customer1 = Customer 271828 "JR Hacker" ["245 Syntax St.", "USA"]
+
+-- but with record syntax we can be more verbose
+-- Note that we also can change the ordering
+
+customer2 = Customer {
+                customerId = 27185
+              , customerAddress = ["Street St."]
+              , customerName = "Jane"
+              }
+
+
