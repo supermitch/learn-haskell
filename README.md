@@ -22,4 +22,4 @@ Various experimentation programs can be found in the [Sandbox](sandbox).
 
 ### Other
 
-* [Haskell.org](official) - Anything from [the official website](https://www.haskell.org/)
+* [Haskell.org](haskell.org) - Anything from [the official website](https://www.haskell.org/)
