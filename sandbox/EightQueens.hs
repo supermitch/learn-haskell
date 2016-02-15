@@ -10,14 +10,17 @@ start_pos = [1..8]
 placeQueen :: [Int] -> [Int]
 placeQueen (x:xs) = undefined
 
--- | Returns True if this queen attacks any other queens on the rank
+-- | Return True if this queen attacks any other queens on the rank
 threatensRank :: [Int] -> Int -> Bool
-threatensRank = undefined
+threatensRank [] _    = False
+threatensRank xs rank = rank `elem` xs
 
--- | Returns True if this queen attacks any other queens on the file
-threatensFile :: [Int] -> Int -> Bool
-threatensFile = undefined
+-- | Return True if this queens attacks any other queens on an upward diagonal
+threatensDiagonalUp :: [Int] -> Int -> Bool
+threatensDiagonalUp [] _    = False
+threatensDiagonalUp xs rank = (rank + 1 == last xs) || threatensDiagonalUp (init xs) (rank + 1)
 
--- | Returns True if this queens attacks any other queens on a diagonal
-threatensDiagonal :: [Int] -> Int -> Bool
-threatensDiagonal = undefined
+-- | Return True if this queens attacks any other queens on a downwards diagonal
+threatensDiagonalDown :: [Int] -> Int -> Bool
+threatensDiagonalDown [] _    = False
+threatensDiagonalDown xs rank = (rank - 1 == last xs) || threatensDiagonalDown (init xs) (rank - 1)
