@@ -7,8 +7,15 @@ start_pos = [1..8]
 -}
 
 -- | Place an additional queen on the board, given a list of positions
-placeQueen :: [Int] -> [Int]
-placeQueen (x:xs) = undefined
+addQueen :: [Int] -> [Int]
+addQueen (x:xs) = undefined
+
+-- | Return True if it's ok to place a queen on this rank, given a previous
+-- list of queens.
+okToPlace :: [Int] -> Int -> Bool
+okToPlace xs rank = not $ or [threatensRank xs rank
+                             ,threatensDiagonalUp xs rank
+                             ,threatensDiagonalDown xs rank]
 
 -- | Return True if this queen attacks any other queens on the rank
 threatensRank :: [Int] -> Int -> Bool
