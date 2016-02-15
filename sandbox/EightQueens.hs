@@ -6,9 +6,13 @@ start_pos = [1..8]
     each number is the row on which the queen is placed.
 -}
 
+-- | Append at most 'n' more queens to the given solution
+appendQueens :: [Int] -> Int -> [[Int]]
+appendQueens xs n = undefined
+
 -- | Place an additional queen on the board, given a list of positions
-addQueen :: [Int] -> [Int]
-addQueen (x:xs) = undefined
+addQueen :: [Int] -> [[Int]]
+addQueen xs = [xs ++ [ys] | ys <- filter (okToPlace xs) [1..8]]
 
 -- | Return True if it's ok to place a queen on this rank, given a previous
 -- list of queens.
