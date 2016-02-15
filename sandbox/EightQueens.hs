@@ -1,16 +1,15 @@
-start_pos = [1..8]
-
 {-
-    The solution must look something like: [1, 3, 5, 6, 2, 7, 9]
-    where each index is a column and
-    each number is the row on which the queen is placed.
+    8 Queens Problem:
+    The solution must look something like: [1, 3, 5, 6, 2, 7, 9] where
+    each index is a column (file) & each number is the row (rank)
+    on which the queen is placed.
 -}
 
 -- | Append at most 'n' more queens to the given solution
-appendQueens :: [Int] -> Int -> [[Int]]
-appendQueens xs n = undefined
+--appendQueens :: [Int] -> Int -> [[Int]]
+appendQueens = map addQueen [[x] | x <- [1..8]]
 
--- | Place an additional queen on the board, given a list of positions
+-- | Place one additional queen on the board, given a list of positions
 addQueen :: [Int] -> [[Int]]
 addQueen xs = [xs ++ [ys] | ys <- filter (okToPlace xs) [1..8]]
 
