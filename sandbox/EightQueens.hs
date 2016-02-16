@@ -5,13 +5,13 @@
     on which the queen is placed.
 -}
 
--- | Append at most 'n' more queens to the given solution
---appendQueens :: [Int] -> Int -> [[Int]]
-appendQueens = map addQueen [[x] | x <- [1..8]]
+solver :: [[Int]] -> [[Int]]
+solver [] = []
+solver xs = concat $ map addQueen xs
 
 -- | Place one additional queen on the board, given a list of positions
 addQueen :: [Int] -> [[Int]]
-addQueen xs = [xs ++ [ys] | ys <- filter (okToPlace xs) [1..8]]
+addQueen xs = [xs ++ [y] | y <- filter (okToPlace xs) [1..8]]
 
 -- | Return True if it's ok to place a queen on this rank, given a previous
 -- list of queens.
