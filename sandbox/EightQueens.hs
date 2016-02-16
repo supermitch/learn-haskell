@@ -9,11 +9,11 @@
 initial :: [[Int]]
 initial = [[x] | x <- [1..8]]
 
--- | Get the 8th iteration of the solver, all of which have 8 Queens.
+-- | Get the 8th iteration of the solver, i.e. all now having 8 Queens.
 solutions = iterate solver initial !! 7
 
--- | Take a set of solutions and extend it into a set of solutions with
--- added Queens.
+-- | Take a set of solutions and extend it into a new set of solutions,
+-- all with another file of added Queens.
 solver :: [[Int]] -> [[Int]]
 solver xs = concat $ map addQueen xs
 
@@ -22,8 +22,7 @@ solver xs = concat $ map addQueen xs
 addQueen :: [Int] -> [[Int]]
 addQueen xs = [xs ++ [y] | y <- filter (okToPlace xs) [1..8]]
 
--- | Return True if it's ok to place a queen on this rank, given a previous
--- list of queens.
+-- | Return True if ok to put a queen on this rank, given a list of queens.
 okToPlace :: [Int] -> Int -> Bool
 okToPlace xs rank = not $ or $ map (threatens xs rank) [id, succ, pred]
 
