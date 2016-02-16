@@ -25,21 +25,13 @@ addQueen xs = [xs ++ [y] | y <- filter (okToPlace xs) [1..8]]
 -- | Return True if it's ok to place a queen on this rank, given a previous
 -- list of queens.
 okToPlace :: [Int] -> Int -> Bool
-okToPlace xs rank = not $ or [threatensRank xs rank
-                             ,threatensDiagonalUp xs rank
-                             ,threatensDiagonalDown xs rank]
+okToPlace xs rank = not $ or [threatens id xs rank
+                             ,threatens succ xs rank
+                             ,threatens pred xs rank
+                             ]
 
--- | Return True if this queen attacks any other queens on the rank
-threatensRank :: [Int] -> Int -> Bool
-threatensRank [] _    = False
-threatensRank xs rank = rank `elem` xs
-
--- | Return True if this queens attacks any other queens on an upward diagonal
-threatensDiagonalUp :: [Int] -> Int -> Bool
-threatensDiagonalUp [] _    = False
-threatensDiagonalUp xs rank = (rank + 1 == last xs) || threatensDiagonalUp (init xs) (rank + 1)
-
--- | Return True if this queens attacks any other queens on a downwards diagonal
-threatensDiagonalDown :: [Int] -> Int -> Bool
-threatensDiagonalDown [] _    = False
-threatensDiagonalDown xs rank = (rank - 1 == last xs) || threatensDiagonalDown (init xs) (rank - 1)
+-- | Return True if this queens attacks any other queens on either an
+-- upward (succ) or downward (pred) diagonal or on the same rank (id)
+threatens :: (Int -> Int) -> [Int] -> Int -> Bool
+threatens _   [] _    = False
+threatens dir xs rank = (dir rank == last xs) || threatens dir (init xs) (dir rank)
