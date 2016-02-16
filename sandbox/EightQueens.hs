@@ -5,11 +5,20 @@
     on which the queen is placed.
 -}
 
+-- | Initial Queen positions (ranks 1 to 8 in the 'a' file)
+initial :: [[Int]]
+initial = [[x] | x <- [1..8]]
+
+-- | Get the 8th iteration of the solver, all of which have 8 Queens.
+solutions = iterate solver initial !! 7
+
+-- | Take a set of solutions and extend it into a set of solutions with
+-- added Queens.
 solver :: [[Int]] -> [[Int]]
-solver [] = []
 solver xs = concat $ map addQueen xs
 
 -- | Place one additional queen on the board, given a list of positions
+-- Note that this works even when xs is an empty list.
 addQueen :: [Int] -> [[Int]]
 addQueen xs = [xs ++ [y] | y <- filter (okToPlace xs) [1..8]]
 
