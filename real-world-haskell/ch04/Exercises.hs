@@ -29,6 +29,12 @@ safeInit (x:xs) = Just (x : fromMaybe [] (safeInit xs))
 -- e.g. splitWith (odd) [1..7] = [[2], [4], [6]]
 --      splitWith (odd) [2, 2, 2, 1, 2, 2, 3, 4] = [[2, 2, 2], [2, 2], [4]]
 
+s1 = [2, 2, 2, 1, 2, 4, 6, 3, 8] -- [[2,2,2], [2,4,6], [8]]
+s2 = [1..7] -- [[2], [4], [6]]
+
 splitWith :: (a -> Bool) -> [a] -> [[a]]
 splitWith p [] = []
-splitWith p xs = fst (break p xs) : splitWith p (snd (break p xs))
+splitWith p xs = fst broken : splitWith p (dropWhile p (snd $ broken))
+    where broken = break p evens
+          evens = dropWhile p xs
+
