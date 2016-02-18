@@ -26,5 +26,9 @@ safeInit (x:xs) = Just (x : fromMaybe [] (safeInit xs))
 -- a predicate and a list of any type, and splits it's input on every element
 -- for which the predicate returns False.
 
+-- e.g. splitWith (odd) [1..7] = [[2], [4], [6]]
+--      splitWith (odd) [2, 2, 2, 1, 2, 2, 3, 4] = [[2, 2, 2], [2, 2], [4]]
+
 splitWith :: (a -> Bool) -> [a] -> [[a]]
-splitWith = undefined
+splitWith p [] = []
+splitWith p (x:xs) = undefined
