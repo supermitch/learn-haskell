@@ -31,4 +31,4 @@ safeInit (x:xs) = Just (x : fromMaybe [] (safeInit xs))
 
 splitWith :: (a -> Bool) -> [a] -> [[a]]
 splitWith p [] = []
-splitWith p (x:xs) = undefined
+splitWith p xs = fst (break p xs) : splitWith p (snd (break p xs))
