@@ -19,6 +19,5 @@ main = mainWith myFunction
 s1 = "This is\nThe second line\nof the file."
 
 firstWords :: String -> String
-firstWords [] = []
-firstWords xs = unlines [head $ words x | x <- lines xs]
+firstWords xs = unlines $ map head $ map words $ lines xs
 
