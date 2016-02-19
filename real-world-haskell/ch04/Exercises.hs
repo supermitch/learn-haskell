@@ -34,7 +34,7 @@ s2 = [1..7] -- [[2], [4], [6]]
 
 splitWith :: (a -> Bool) -> [a] -> [[a]]
 splitWith p [] = []
-splitWith p xs = fst broken : splitWith p (dropWhile p (snd $ broken))
+splitWith p xs = fst broken : splitWith p (dropWhile p (snd broken))
     where broken = break p evens
           evens = dropWhile p xs
 
