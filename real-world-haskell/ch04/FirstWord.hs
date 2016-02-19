@@ -16,7 +16,9 @@ main = mainWith myFunction
           -- replace "id" with the name of our function, below
           myFunction = firstWords
 
-firstWords :: String -> [String]
+s1 = "This is\nThe second line\nof the file."
+
+firstWords :: String -> String
 firstWords [] = []
 firstWords xs = unlines [head $ words x | x <- lines xs]
 
