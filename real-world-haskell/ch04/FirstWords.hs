@@ -1,4 +1,4 @@
--- file: ch04/FixLines.hs
+-- file: ch04/FirstWords.hs
 
 import System.Environment (getArgs)
 
@@ -17,6 +17,7 @@ main = mainWith myFunction
           myFunction = firstWords
 
 s1 = "This is\nThe second line\nof the file."
+-- should return "This\nThe\nof\n"
 
 firstWords :: String -> String
 firstWords xs = unlines $ map head $ map words $ lines xs
