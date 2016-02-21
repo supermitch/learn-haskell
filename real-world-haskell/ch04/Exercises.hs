@@ -38,3 +38,8 @@ splitWith p xs = fst broken : splitWith p (dropWhile p (snd broken))
     where broken = break p evens
           evens = dropWhile p xs
 
+-- 3. See file FirstWords.hs: Write a program that prints the first word of
+-- each line of its input.
+
+-- 4. See file Transpose.hs: Write a program that transposes the text in a file.
+-- e.g. "hello\nworld\n" to "hw\neo\nlr\nll\nod\n"
