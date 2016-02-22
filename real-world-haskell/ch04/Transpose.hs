@@ -21,6 +21,10 @@ s1 = "hello\nworld\n" -- "hw\neo\nlr\nll\nod\n"
 
 transposeFile :: String -> String
 transposeFile [] = []
-transposeFile xs = lines xs
+transposeFile xs = joinWords $ lines xs
 
+-- | Join the first letter of two words
+joinWords :: [String] -> String
+joinWords [] = ""
+joinWords (x:xs) = head x : joinWords xs
 
