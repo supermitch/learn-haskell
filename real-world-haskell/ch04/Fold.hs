@@ -61,3 +61,15 @@ foldl' f z xs = foldr step id xs z
 
 -- Good lord...
 
+-- You can write the identity transformation also:
+identity :: [a] -> [a]
+identify xs = foldr (:) [] xs
+
+-- We can also look at foldr as a way of appending, e.g.
+
+[1..4] ++ [5..8] -- [1..8]
+
+-- can be written as:
+
+append :: [a] -> [a]
+append xs ys = foldr (:) ys xs
