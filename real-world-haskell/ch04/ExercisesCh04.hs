@@ -43,3 +43,11 @@ splitWith p xs = fst broken : splitWith p (dropWhile p (snd broken))
 
 -- 4. See file Transpose.hs: Write a program that transposes the text in a file.
 -- e.g. "hello\nworld\n" to "hw\neo\nlr\nll\nod\n"
+
+-- FOLD section
+
+-- 1. Use a fold (choosing the appropriate fold will make your code much
+-- simpler) to rewrite and improve upon the asInt function
+
+asIntFold :: String -> Int
+asIntFold s = undefined
