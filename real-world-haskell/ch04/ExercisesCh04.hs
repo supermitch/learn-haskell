@@ -1,5 +1,7 @@
--- 1. Write your own safe version of partial list functions
-import Data.Maybe
+import Data.Char (digitToInt)
+import Data.Maybe (fromMaybe)
+
+-- 1. Write your own safe version of partial list functions import Data.Maybe
 
 -- e.g. safeHead [1..4] = 1
 safeHead :: [a] -> Maybe a
@@ -50,4 +52,6 @@ splitWith p xs = fst broken : splitWith p (dropWhile p (snd broken))
 -- simpler) to rewrite and improve upon the asInt function
 
 asIntFold :: String -> Int
-asIntFold s = undefined
+asIntFold xs = foldl step 0 xs
+    where step acc x = acc * 10 + digitToInt x
+
