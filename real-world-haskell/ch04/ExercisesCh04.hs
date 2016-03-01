@@ -46,7 +46,7 @@ splitWith p xs = fst broken : splitWith p (dropWhile p (snd broken))
 -- 4. See file Transpose.hs: Write a program that transposes the text in a file.
 -- e.g. "hello\nworld\n" to "hw\neo\nlr\nll\nod\n"
 
--- FOLD section
+-- FOLD section, pg. 97
 
 -- 1. Use a fold (choosing the appropriate fold will make your code much
 -- simpler) to rewrite and improve upon the asInt function
@@ -55,3 +55,13 @@ asIntFold :: String -> Int
 asIntFold xs = foldl step 0 xs
     where step acc x = acc * 10 + digitToInt x
 
+-- 2. Handle the following:
+a = asIntFold "101" -- 101
+b = asIntFold "-31337" -- -31337
+c = asIntFold "1978" -- 1978
+
+-- 5. Concat has the following type:
+-- 6. Write your own definition of concat using foldlr
+concat' :: [[a]] -> [a]
+concat (x:xs) = foldr step [] xs
+    where step x acc = undefined
