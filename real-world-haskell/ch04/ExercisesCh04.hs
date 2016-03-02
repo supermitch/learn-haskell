@@ -60,11 +60,27 @@ a = asIntFold "101" -- 101
 b = asIntFold "-31337" -- -31337
 c = asIntFold "1978" -- 1978
 
--- 5. Concat has the following type:
--- 6. Write your own definition of concat using foldlr
+-- 3. Concat has the following type:
+-- Write your own definition of concat using foldlr
 concat' :: [[a]] -> [a]
 concat' (x:xs) = foldr step [] (x:xs)
     where step x acc = if null x then acc else flatten x acc
             where flatten [] acc = acc
                   flatten xs acc = flatten (init xs) (last xs : acc)
+
+-- 4. write takeWhile using explicit recursion, then foldr.
+
+takeWhile' :: (a -> Bool) -> [a] -> [a]
+takeWhile' p [] = []
+takeWhile' p (x:xs)
+    | not $ p x = []
+    | otherwise = x : takeWhile' p xs
+
+takeWhile'' :: (a -> Bool) -> [a] -> [a]
+takeWhile'' p xs = foldr step [] xs
+    where step x acc
+            | not $ p x = []
+            | otherwise = x : acc
+
+-- That works... although I can't really understand why...
 
