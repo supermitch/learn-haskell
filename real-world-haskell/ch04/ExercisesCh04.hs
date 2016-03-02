@@ -63,5 +63,8 @@ c = asIntFold "1978" -- 1978
 -- 5. Concat has the following type:
 -- 6. Write your own definition of concat using foldlr
 concat' :: [[a]] -> [a]
-concat (x:xs) = foldr step [] xs
-    where step x acc = undefined
+concat' (x:xs) = foldr step [] (x:xs)
+    where step x acc = if null x then acc else flatten x acc
+            where flatten [] acc = acc
+                  flatten xs acc = flatten (init xs) (last xs : acc)
+
