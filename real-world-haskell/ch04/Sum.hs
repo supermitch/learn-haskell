@@ -13,3 +13,9 @@ foldlSum xs = foldl step 0 xs
 
 niceSum :: [Integer] -> Integer
 niceSum xs = foldl (+) 0 xs
+
+-- We can also use currying to make this better. This gives us a function
+-- of the same type!
+
+niceSum' :: [Integer] -> Integer
+niceSum' = foldl (+) 0
