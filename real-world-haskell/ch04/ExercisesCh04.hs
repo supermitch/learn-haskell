@@ -84,3 +84,13 @@ takeWhile'' p xs = foldr step [] xs
 
 -- That works... although I can't really understand why...
 
+-- 5. Understand and re-write groupBy using a fold:
+
+groupBy' :: (a -> a -> Bool) -> [a] -> [[a]]
+groupBy' f xs = foldr step [] xs
+    where step x [] = [[x]]
+          step x acc
+            | f x (head (head acc)) = (x : (head acc)) : tail acc
+            | otherwise             = [x] : acc
+
+
