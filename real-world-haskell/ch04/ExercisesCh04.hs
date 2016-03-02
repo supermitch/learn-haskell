@@ -94,3 +94,13 @@ groupBy' f xs = foldr step [] xs
             | otherwise             = [x] : acc
 
 
+-- 6. How many of the following Prelude functions can you rewrite using list
+-- folds? any, cycle, words, unlines
+-- For those functions where you can use either foldl' or foldr, which is more
+-- appropriate in each case?
+
+any' = undefined
+cycle' = undefined
+words' = undefined
+unlines' = undefined
+
