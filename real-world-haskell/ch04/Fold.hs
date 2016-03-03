@@ -75,3 +75,63 @@ append :: [a] -> [a]
 append xs ys = foldr (:) ys xs
 
 
+-- Avoiding space leaks with seq:
+
+-- The actual fold' is a strict left fold, bypasses lazy evaluation
+-- via a special function called "seq":
+foldl'' _    zero []     = zero
+foldl'' step zero (x:xs) =
+    let new = step zero x
+     in new `seq` foldl'' step new xs
+
+-- it operates as follows... seq forces the first argument to be evaluated,
+-- then returns the second argument (of type b).
+{-
+foldl'' (+) 1 (2:[])
+
+expands as:
+
+foldl' step zero (x:xs) =
+    let new = step zero x
+     in new `seq` foldl' step new xs
+
+foldl' (+) 1 (2:[]) =
+    let new = (+) 1 2
+     in new `seq` foldl' (+) new []  -- note that `seq` is infix, so
+
+therefore results in: foldl' (+) 3 []
+
+which gives 3.
+
+-}
+-- To use seq effectively:
+
+-- * "seq" must be the first thing evaluated in an expression:
+
+-- incorrect: seq is hidden by the application of someFunc
+-- since someFunc will be evaluted first, seq may occur too late
+
+hiddenInside x y = someFunc (x `seq` y)
+
+-- incorrect: a variation of the above mistake:
+hiddenByLet x y z = let a = x `seq` someFunc y
+                     in anotherFunc a z
+
+-- correct: seq will be evaluted first, forcing evaluation of x:
+onTheOutside x y = x `seq` someFunc y
+
+-- * To evaluate several values, chain applications of seq together:
+chained x y z = x `seq` y `seq` someFunc z
+
+-- * A common mistake is to use seq with two unrelated expressions:
+badExpression step zero (x:xs) =
+    seq (step zero x) (badExpression step (step zero x) xs)
+-- Here we are apparently trying to evaluate 'step zero x' strictly.
+
+-- seq stops when it reaches a constructor:
+strictPair (a, b) = a `seq` b `seq` (a, b)
+
+strictList (x:xs) = x `seq` x : strictList xs
+strictList []     = []
+-- Those are ways to work around that limitation?
+
