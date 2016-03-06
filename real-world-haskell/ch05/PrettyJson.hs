@@ -1,5 +1,13 @@
 -- file: ch05/PrettyJson.hs
+module PrettyJson (renderJValue) where
+
 import Numeric (showHex)
+import Data.Char (ord)
+import Data.Bits (shiftR, (.&.))
+
+import SimpleJson (JValue(..))
+import Prettyify  (Doc, (<>), char, double, fsep, hcat, punctuate, text,
+                   compact, pretty)
 
 renderJValue :: JValue -> Doc
 renderJValue (JBool True) = text "true"
@@ -7,6 +15,9 @@ renderJValue (JBool False) = text "false"
 renderJValue (JNull) = text "null"
 renderJValue (JNumber num) = double num
 renderJValue (JString str) = string str
+renderJValue (JArray ary) = series '[' ']' renderJValue ary
+renderJValue (JObject obj) = series '{' '}' field obj
+    where field (name, val) = string name <> text ": " <> renderJValue val
 
 string :: String -> Doc
 string = enclose '"' '"' . hcat . map oneChar
@@ -14,14 +25,8 @@ string = enclose '"' '"' . hcat . map oneChar
 enclose :: Char -> Char -> Doc -> Doc
 enclose left right x = char left <> x <> char right
 
-(<>) :: Doc -> Doc -> Doc
-a <> b = undefined
-
 char :: Char -> Doc
 char c = undefined
-
-hcat :: [Doc] -> Doc
-hcat xs = undefined
 
 oneChar :: Char -> Doc
 oneChar c = case lookup c simpleEscapes of
