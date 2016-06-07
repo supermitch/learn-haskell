@@ -80,3 +80,44 @@ module Shapes
 
 -- 2. Record Syntax --
 ----------------------
+
+-- We want to create a Data Type for a person
+
+data Person = Person String String Int Float String String deriving (Show)
+
+> let guy = Person "Buddy" "Finkle" 43 184.2 "459-7707" "Chocolate"
+
+-- Cool but useless. If you wanted to get a single field you would have
+-- to do:
+
+firstName :: Person -> String
+firstName (Person name _ _ _ _ _) = name
+
+-- And so on for all other attributes, which is dumb
+-- Alternatively you can use record syntax
+
+data Person = Person { firstName :: String
+                     , lastName :: String
+                     , age :: Int
+                     , height :: Float
+                     , phoneNumber :: String
+                     , flavour :: String
+                     } deriving (Show)
+
+-- Haskell now automatically created our equivalent "getters"
+
+> :t flavour
+flavour :: Person -> String
+
+-- If you define and use record syntax to instantiate, show looks better:
+
+
+data Car = Car {company :: String, model :: String, year :: Int} deriving (Show)
+
+-- Instantiate using record syntax too
+> let truck = Car {company="Ford", model="Mustang", year=1967}
+Car {company = "Ford", model = "Mustang", year = 1967} -- displayed nicely
+
+-- no need to order fields in the Value Constructor call.
+
+
